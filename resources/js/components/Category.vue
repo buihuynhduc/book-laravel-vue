@@ -1,16 +1,16 @@
 <template>
     <div class="container_category">
         <button class="btn btn-primary" v-on:click="popupform" style="margin-bottom: 10px">Add Category</button>
-        <form style="display: none" id="form" ref="form">
+        <form style="display: none" id="form" ref="form" @submit.prevent="addcategory">
             <div class="form-row">
                 <div class="col-2">
-                    <input type="text" class="form-control" placeholder="Category">
+                    <input type="text" class="form-control" placeholder="Category" v-model="categories.name">
                 </div>
-                <div class="col-1">
+                <div class="col-1" style="margin-right: 20px">
                     <button class="btn btn-primary" >Create Category</button>
                 </div>
                 <div class="col-1">
-                    <button class="btn btn-warning" v-on:click="cancelform" >Cancel</button>
+                    <button type="submit" class="btn btn-warning" v-on:click="cancelform" >Cancel</button>
                 </div>
 
             </div>
@@ -50,7 +50,7 @@ export default {
             categories: []
         }
     },
-    created() {
+    mounted() {
         this.axios.get('http://127.0.0.1:8000/api/category').then(response => {
             this.categories = response.data;
             console.log(this.categories);
@@ -58,18 +58,26 @@ export default {
     },
     methods: {
         dlcategory(id) {
-            axios.delete(`http://127.0.0.1:8000/api/category/` + id)
+            this.axios.delete(`http://127.0.0.1:8000/api/category/` + id)
                 .then(response => {
                     console.log(response)
                 });
-            this.$forceUpdate();
         },
         popupform() {
             this.$refs.form.style.display = 'block';
         },
         cancelform()
         {
+            console.log('dong');
             this.$refs.form.style.display = 'none';
+        },
+        addcategory(){
+            var data = {
+                name: this.categories.name
+            }
+            this.axios.post(`http://127.0.0.1:8000/api/category`,data).then(response=>{
+                console.log(response);
+            })
         }
     }
 

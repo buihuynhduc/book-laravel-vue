@@ -5386,7 +5386,7 @@ __webpack_require__.r(__webpack_exports__);
       categories: []
     };
   },
-  created: function created() {
+  mounted: function mounted() {
     var _this = this;
 
     this.axios.get('http://127.0.0.1:8000/api/category').then(function (response) {
@@ -5396,16 +5396,24 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     dlcategory: function dlcategory(id) {
-      axios["delete"]("http://127.0.0.1:8000/api/category/" + id).then(function (response) {
+      this.axios["delete"]("http://127.0.0.1:8000/api/category/" + id).then(function (response) {
         console.log(response);
       });
-      this.$forceUpdate();
     },
     popupform: function popupform() {
       this.$refs.form.style.display = 'block';
     },
     cancelform: function cancelform() {
+      console.log('dong');
       this.$refs.form.style.display = 'none';
+    },
+    addcategory: function addcategory() {
+      var data = {
+        name: this.categories.name
+      };
+      this.axios.post("http://127.0.0.1:8000/api/category", data).then(function (response) {
+        console.log(response);
+      });
     }
   }
 });
@@ -10571,7 +10579,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.container_book[data-v-1b1c1554] {\n    margin: 20px 20px;\n}\n#create_book[data-v-1b1c1554] {\n    margin-bottom: 10px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.container_book[data-v-1b1c1554] {\r\n    margin: 20px 20px;\n}\n#create_book[data-v-1b1c1554] {\r\n    margin-bottom: 10px;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -28832,17 +28840,53 @@ var render = function () {
     _vm._v(" "),
     _c(
       "form",
-      { ref: "form", staticStyle: { display: "none" }, attrs: { id: "form" } },
+      {
+        ref: "form",
+        staticStyle: { display: "none" },
+        attrs: { id: "form" },
+        on: {
+          submit: function ($event) {
+            $event.preventDefault()
+            return _vm.addcategory.apply(null, arguments)
+          },
+        },
+      },
       [
         _c("div", { staticClass: "form-row" }, [
-          _vm._m(0),
+          _c("div", { staticClass: "col-2" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.categories.name,
+                  expression: "categories.name",
+                },
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text", placeholder: "Category" },
+              domProps: { value: _vm.categories.name },
+              on: {
+                input: function ($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.categories, "name", $event.target.value)
+                },
+              },
+            }),
+          ]),
           _vm._v(" "),
-          _vm._m(1),
+          _vm._m(0),
           _vm._v(" "),
           _c("div", { staticClass: "col-1" }, [
             _c(
               "button",
-              { staticClass: "btn btn-warning", on: { click: _vm.cancelform } },
+              {
+                staticClass: "btn btn-warning",
+                attrs: { type: "submit" },
+                on: { click: _vm.cancelform },
+              },
               [_vm._v("Cancel")]
             ),
           ]),
@@ -28851,7 +28895,7 @@ var render = function () {
     ),
     _vm._v(" "),
     _c("table", { staticClass: "table table-striped" }, [
-      _vm._m(2),
+      _vm._m(1),
       _vm._v(" "),
       _c(
         "tbody",
@@ -28865,7 +28909,7 @@ var render = function () {
             _vm._v(" "),
             _c("td", [_vm._v(_vm._s(category.updated_at))]),
             _vm._v(" "),
-            _vm._m(3, true),
+            _vm._m(2, true),
             _vm._v(" "),
             _c("td", [
               _c(
@@ -28893,22 +28937,15 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-2" }, [
-      _c("input", {
-        staticClass: "form-control",
-        attrs: { type: "text", placeholder: "Category" },
-      }),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-1" }, [
-      _c("button", { staticClass: "btn btn-primary" }, [
-        _vm._v("Create Category"),
-      ]),
-    ])
+    return _c(
+      "div",
+      { staticClass: "col-1", staticStyle: { "margin-right": "20px" } },
+      [
+        _c("button", { staticClass: "btn btn-primary" }, [
+          _vm._v("Create Category"),
+        ]),
+      ]
+    )
   },
   function () {
     var _vm = this
