@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\book;
+use App\Models\category;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
@@ -15,7 +16,7 @@ class BookController extends Controller
     public function index()
     {
         $books = book::all();
-        return response()->json($books);
+        return response()->json($books,200);
     }
 
     /**
@@ -36,7 +37,12 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       $book = new book();
+       $book->bookname = $request->bookname;
+       $book->description= $request->description;
+       $book->category_id= $request->category_id;
+       $book->save();
+       return response()->json($book,200);
     }
 
     /**
@@ -47,7 +53,8 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        //
+        $book = book::findOrFail($id);
+        return response()->json($book);
     }
 
     /**
@@ -70,7 +77,12 @@ class BookController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $book = book::findOrFail($id);
+        $book->bookname =isset( $request->bookname)?$request->bookname:$book->bookname;
+        $book->description=isset( $request->description)?$request->description:$book->description;
+        $book->category_id= isset( $request->category_id)?$request->category_id:$book->category_id;
+        $book->save();
+        return response()->json($book,200);
     }
 
     /**
@@ -81,6 +93,11 @@ class BookController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $book = book::findOrFail($id);
+        $book->delete();
+        return response()->json([
+            'Status'=>200,
+            'Message'=>'xoa thanh cong',
+        ]);
     }
 }

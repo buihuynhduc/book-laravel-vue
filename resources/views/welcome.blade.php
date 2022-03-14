@@ -8,7 +8,7 @@
     <title>Document</title>
 </head>
 <body>
-<div id="app" style="display: flex">
+<div id="app">
     <example-component></example-component>
     <hello></hello>
 </div>

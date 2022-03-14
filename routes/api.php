@@ -18,6 +18,15 @@ use App\Http\Controllers\Controller;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::resource('/category',\App\Http\Controllers\CategoryController::class);
-Route::resource('/book',\App\Http\Controllers\BookController::class);
+Route::get('book',[\App\Http\Controllers\BookController::class,'index']);
+Route::get('book/{id}',[\App\Http\Controllers\BookController::class,'show']);
+Route::post('book',[\App\Http\Controllers\BookController::class,'store']);
+Route::patch('book/{id}',[\App\Http\Controllers\BookController::class,'update']);
+Route::delete('book/{id}',[\App\Http\Controllers\BookController::class,'destroy']);
+
+Route::get('category',[\App\Http\Controllers\CategoryController::class,'index']);
+Route::get('category/{id}',[\App\Http\Controllers\CategoryController::class,'show']);
+Route::post('category',[\App\Http\Controllers\CategoryController::class,'store']);
+Route::patch('category/{id}',[\App\Http\Controllers\CategoryController::class,'update']);
+Route::delete('category/{id}',[\App\Http\Controllers\CategoryController::class,'destroy']);
 

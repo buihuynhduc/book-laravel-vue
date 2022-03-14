@@ -36,7 +36,13 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $category = new category();
+        $category->name= $request->name;
+        $category->save();
+        return response()->json([
+            'Status'=>'200',
+            'Message'=>'tao category thanh cong',
+        ]);
     }
 
     /**
@@ -47,7 +53,8 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        //
+        $category = category::find($id);
+        return response()->json($category);
     }
 
     /**
@@ -70,7 +77,10 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $category = category::findOrFail($id);
+        $category->name= isset($request->name)?$request->name:$category->name;
+        $category->save();
+        return response()->json($category);
     }
 
     /**
@@ -81,6 +91,11 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $category = category::findOrFail($id);
+        $category->delete();
+        return response()->json([
+            'Status'=>'200',
+            'Message'=>'xoa thanh cong',
+        ]);
     }
 }
