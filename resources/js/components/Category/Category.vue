@@ -6,14 +6,9 @@
                 <div class="col-2">
                     <input type="text" class="form-control" placeholder="Category" v-model="categories.name">
                 </div>
-                <div class="col-1" style="margin-right: 20px">
-                    <button class="btn btn-primary" >Create Category</button>
-                </div>
-                <div class="col-1">
-                    <button type="submit" class="btn btn-warning" v-on:click="cancelform" >Cancel</button>
-                </div>
-
             </div>
+            <button type="submit" class="btn btn-primary" style="margin-top: 10px">Create Category</button>
+            <button style="margin-top: 10px" class="btn btn-warning" v-on:click="cancelform">Cancel</button>
         </form>
         <table class="table table-striped">
             <thead>
@@ -66,16 +61,14 @@ export default {
         popupform() {
             this.$refs.form.style.display = 'block';
         },
-        cancelform()
-        {
-            console.log('dong');
+        cancelform() {
             this.$refs.form.style.display = 'none';
         },
-        addcategory(){
+        addcategory() {
             var data = {
                 name: this.categories.name
             }
-            this.axios.post(`http://127.0.0.1:8000/api/category`,data).then(response=>{
+            this.axios.post(`http://127.0.0.1:8000/api/category`, data).then(response => {
                 console.log(response);
             })
         }

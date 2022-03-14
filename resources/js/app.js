@@ -21,9 +21,8 @@ Vue.use(VueAxios,axios);
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('category', require('./components/Category').default);
-Vue.component('book',require('./components/Book').default);
+Vue.component('category', require('./components/Category/Category').default);
+Vue.component('book',require('./components/Book/Book').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
