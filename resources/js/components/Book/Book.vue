@@ -14,7 +14,7 @@
             <input type="text" class="form-control" placeholder="description" style="margin-bottom: 10px"
                    v-model="book.description">
             <button type="submit" class="btn btn-primary">Create Book</button>
-            <button class="btn btn-warning" v-on:click="closeform">Cancel</button>
+            <button type="button" class="btn btn-warning" v-on:click="closeform">Cancel</button>
         </form>
         <table class="table table-striped">
             <thead>
@@ -50,8 +50,12 @@
 </template>
 
 <script>
+import BookEdit from "./BookEdit";
 export default {
     name: "book",
+    components: {
+      BookEdit,
+    },
     data() {
         return {
             books: [],

@@ -1,15 +1,19 @@
 <template>
     <div class="container_category">
-        <button class="btn btn-primary" v-on:click="popupform" style="margin-bottom: 10px">Add Category</button>
-        <form style="display: none" id="form" ref="form" @submit.prevent="addcategory">
-            <div class="form-row">
-                <div class="col-2">
-                    <input type="text" class="form-control" placeholder="Category" v-model="categories.name">
+        <CategoryEdit v-if="showedit"></CategoryEdit>
+        <div v-if="showedit==false">
+            <button id="addcategory" ref="addcategory" class="btn btn-primary" v-on:click="popupform" style="margin-bottom: 10px">Add Category</button>
+            <form style="display: none" id="form" ref="form" @submit.prevent="addcategory">
+                <div class="form-row">
+                    <div class="col-2">
+                        <input type="text" class="form-control" placeholder="Category" v-model="category.name">
+                    </div>
                 </div>
-            </div>
-            <button type="submit" class="btn btn-primary" style="margin-top: 10px">Create Category</button>
-            <button style="margin-top: 10px" class="btn btn-warning" v-on:click="cancelform">Cancel</button>
-        </form>
+                <button type="submit" class="btn btn-primary" style="margin-top: 10px">Create Category</button>
+                <button type="button" class="btn btn-warning" style="margin-top: 10px" v-on:click="cancelform">Cancel</button>
+            </form>
+        </div>
+
         <table class="table table-striped">
             <thead>
             <tr>
@@ -28,7 +32,7 @@
                 <td>{{ category.created_at }}</td>
                 <td>{{ category.updated_at }}</td>
                 <td>
-                    <button class="btn btn-warning">Edit</button>
+                    <button class="btn btn-warning" @click="editcategory">Edit</button>
                 </td>
                 <td>
                     <button class="btn btn-danger" v-on:click="dlcategory(category.id)">Delete</button>
@@ -39,10 +43,16 @@
     </div>
 </template>
 <script>
+import CategoryEdit from "./CategoryEdit";
 export default {
+    components: {
+      CategoryEdit,
+    },
     data() {
         return {
-            categories: []
+            categories: [],
+            category: [],
+            showedit: false,
         }
     },
     mounted() {
@@ -56,6 +66,7 @@ export default {
             this.axios.delete(`http://127.0.0.1:8000/api/category/` + id)
                 .then(response => {
                     console.log(response)
+                    alert('xoa category thanh cong')
                 });
         },
         popupform() {
@@ -66,11 +77,15 @@ export default {
         },
         addcategory() {
             var data = {
-                name: this.categories.name
+                name: this.category.name
             }
             this.axios.post(`http://127.0.0.1:8000/api/category`, data).then(response => {
                 console.log(response);
             })
+        },
+        editcategory()
+        {
+            this.showedit=true;
         }
     }
 
