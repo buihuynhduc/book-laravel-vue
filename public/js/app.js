@@ -5437,6 +5437,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _CategoryEdit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CategoryEdit */ "./resources/js/components/Category/CategoryEdit.vue");
 /* harmony import */ var _EventBus__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../EventBus */ "./resources/js/EventBus.js");
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 //
 //
 //
@@ -5497,6 +5503,9 @@ __webpack_require__.r(__webpack_exports__);
       showedit: false
     };
   },
+  created: function created() {
+    _EventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$on('updatemenu', this.updatemenu);
+  },
   mounted: function mounted() {
     var _this = this;
 
@@ -5541,6 +5550,26 @@ __webpack_require__.r(__webpack_exports__);
     },
     closeedit: function closeedit() {
       this.showedit = false;
+    },
+    updatemenu: function updatemenu(data) {
+      console.log(data.id);
+
+      var _iterator = _createForOfIteratorHelper(this.categories),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var category = _step.value;
+
+          if (data.id == category.id) {
+            category.name = data.name;
+          }
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
     }
   }
 });
@@ -5594,16 +5623,23 @@ __webpack_require__.r(__webpack_exports__);
       this.$emit('closeedit');
     },
     getdataedit: function getdataedit(id) {
-      console.log(id); // this.axios.get('http://127.0.0.1:8000/api/category/' + id).then(response => {
-      //     this.dataedit = response.data
-      // })
+      var _this = this;
+
+      this.axios.get('http://127.0.0.1:8000/api/category/' + id).then(function (response) {
+        _this.dataedit = response.data;
+      });
     },
-    updatecate: function updatecate() {
+    updatecate: function updatecate(id) {
+      var _this2 = this;
+
       var data = {
         name: this.dataedit.name
       };
-      this.axios.patch("http://127.0.0.1:8000/api/category", data).then(function (response) {
-        console.log(response);
+      this.axios.put("http://127.0.0.1:8000/api/category/" + id, data).then(function (response) {
+        _EventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('updatemenu', response.data);
+        _this2.dataedit = '';
+
+        _this2.cancelform();
       });
     }
   }
@@ -29226,11 +29262,9 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "container_category" },
+    { staticClass: "container_category", on: { updatemenu: _vm.updatemenu } },
     [
-      _vm.showedit
-        ? _c("CategoryEdit", { on: { closeedit: _vm.closeedit } })
-        : _vm._e(),
+      _vm.showedit ? _c("CategoryEdit") : _vm._e(),
       _vm._v(" "),
       _vm.showedit == false
         ? _c("div", { on: { closeedit: _vm.closeedit } }, [
@@ -29426,7 +29460,7 @@ var render = function () {
         on: {
           submit: function ($event) {
             $event.preventDefault()
-            return _vm.updatecate.apply(null, arguments)
+            return _vm.updatecate(_vm.dataedit.id)
           },
         },
       },

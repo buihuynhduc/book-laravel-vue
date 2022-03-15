@@ -1,6 +1,6 @@
 <template>
-    <div class="container_category">
-        <CategoryEdit v-if="showedit" @closeedit="closeedit"></CategoryEdit>
+    <div class="container_category" @updatemenu="updatemenu">
+        <CategoryEdit v-if="showedit"></CategoryEdit>
         <div v-if="showedit==false" @closeedit="closeedit">
             <button id="addcategory" ref="addcategory" class="btn btn-primary" v-on:click="popupform"
                     style="margin-bottom: 10px">Add Category
@@ -60,6 +60,9 @@ export default {
             showedit: false,
         }
     },
+    created() {
+        EventBus.$on('updatemenu', this.updatemenu)
+    },
     mounted() {
         this.axios.get('http://127.0.0.1:8000/api/category').then(response => {
             this.categories = response.data;
@@ -90,16 +93,23 @@ export default {
                 this.categories.push(response.data)
                 this.cancelform()
             });
-
-
         },
         editcategory(id) {
             this.showedit = true;
-            EventBus.$emit('editcate',id)
+            EventBus.$emit('editcate', id)
         },
         closeedit() {
 
             this.showedit = false;
+        },
+        updatemenu(data) {
+            console.log(data.id)
+            for (const category of this.categories) {
+                if (data.id == category.id){
+                    category.name=data.name
+                }
+
+            }
         }
     }
 
