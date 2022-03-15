@@ -27,6 +27,9 @@ export default {
     created() {
         EventBus.$on('editcate', this.getdataedit)
     },
+    destroyed() {
+        EventBus.$off('editcate', this.getdataedit)
+    },
     methods: {
         cancelform() {
             this.$emit('closeedit')

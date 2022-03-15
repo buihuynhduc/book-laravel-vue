@@ -5586,6 +5586,9 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     _EventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('editcate', this.getdataedit);
   },
+  destroyed: function destroyed() {
+    _EventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$off('editcate', this.getdataedit);
+  },
   methods: {
     cancelform: function cancelform() {
       this.$emit('closeedit');
@@ -29225,7 +29228,9 @@ var render = function () {
     "div",
     { staticClass: "container_category" },
     [
-      _vm.showedit ? _c("CategoryEdit") : _vm._e(),
+      _vm.showedit
+        ? _c("CategoryEdit", { on: { closeedit: _vm.closeedit } })
+        : _vm._e(),
       _vm._v(" "),
       _vm.showedit == false
         ? _c("div", { on: { closeedit: _vm.closeedit } }, [

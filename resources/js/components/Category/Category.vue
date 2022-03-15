@@ -1,6 +1,6 @@
 <template>
     <div class="container_category">
-        <CategoryEdit v-if="showedit"></CategoryEdit>
+        <CategoryEdit v-if="showedit" @closeedit="closeedit"></CategoryEdit>
         <div v-if="showedit==false" @closeedit="closeedit">
             <button id="addcategory" ref="addcategory" class="btn btn-primary" v-on:click="popupform"
                     style="margin-bottom: 10px">Add Category
@@ -95,10 +95,10 @@ export default {
         },
         editcategory(id) {
             this.showedit = true;
-            EventBus.$emit('editcate', id)
-
+            EventBus.$emit('editcate',id)
         },
         closeedit() {
+
             this.showedit = false;
         }
     }
