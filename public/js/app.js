@@ -5615,9 +5615,6 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     _EventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('editcate', this.getdataedit);
   },
-  destroyed: function destroyed() {
-    _EventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$off('editcate', this.getdataedit);
-  },
   methods: {
     cancelform: function cancelform() {
       this.$emit('closeedit');
