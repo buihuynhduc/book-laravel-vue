@@ -46,7 +46,7 @@ class BookController extends Controller
        $book->description= $request->description;
        $book->category_id= $request->category_id;
        $book->save();
-       return response()->json($book,200);
+       return response()->json($book);
     }
 
     /**

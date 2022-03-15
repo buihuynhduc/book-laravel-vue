@@ -39,10 +39,7 @@ class CategoryController extends Controller
         $category = new category();
         $category->name= $request->name;
         $category->save();
-        return response()->json([
-            'Status'=>'200',
-            'Message'=>'tao category thanh cong',
-        ]);
+        return response()->json($category);
     }
 
     /**

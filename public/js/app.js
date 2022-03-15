@@ -5346,9 +5346,14 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     });
   },
   methods: {
-    dlbook: function dlbook(id) {
+    dlbook: function dlbook(id, index) {
+      var _this2 = this;
+
       this.axios["delete"]("http://127.0.0.1:8000/api/book/" + id).then(function (response) {
-        alert('Xoa Book Thanh Cong');
+        if (index > -1) {
+          _this2.books.splice(index, 1); // 2nd parameter means remove one item only
+
+        }
       });
     },
     openaddform: function openaddform() {
@@ -5358,6 +5363,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       this.$refs.form.style.display = 'none';
     },
     addbook: function addbook() {
+      var _this3 = this;
+
       var _iterator = _createForOfIteratorHelper(this.categories),
           _step;
 
@@ -5381,7 +5388,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         category_id: this.book.category_id
       };
       this.axios.post("http://127.0.0.1:8000/api/book", data).then(function (response) {
-        alert('Tao Book Thanh Cong');
+        _this3.books.push(response.data);
       });
     }
   }
@@ -5425,6 +5432,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _CategoryEdit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CategoryEdit */ "./resources/js/components/Category/CategoryEdit.vue");
+/* harmony import */ var _EventBus__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../EventBus */ "./resources/js/EventBus.js");
 //
 //
 //
@@ -5469,6 +5477,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
@@ -5490,10 +5502,14 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
-    dlcategory: function dlcategory(id) {
+    dlcategory: function dlcategory(id, index) {
+      var _this2 = this;
+
       this.axios["delete"]("http://127.0.0.1:8000/api/category/" + id).then(function (response) {
-        console.log(response);
-        alert('xoa category thanh cong');
+        if (index > -1) {
+          _this2.categories.splice(index, 1); // 2nd parameter means remove one item only
+
+        }
       });
     },
     popupform: function popupform() {
@@ -5501,17 +5517,26 @@ __webpack_require__.r(__webpack_exports__);
     },
     cancelform: function cancelform() {
       this.$refs.form.style.display = 'none';
+      this.category.name = '';
     },
     addcategory: function addcategory() {
+      var _this3 = this;
+
       var data = {
         name: this.category.name
       };
       this.axios.post("http://127.0.0.1:8000/api/category", data).then(function (response) {
-        console.log(response);
+        _this3.categories.push(response.data);
+
+        _this3.cancelform();
       });
     },
-    editcategory: function editcategory() {
+    editcategory: function editcategory(id) {
       this.showedit = true;
+      _EventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('editcate', id);
+    },
+    closeedit: function closeedit() {
+      this.showedit = false;
     }
   }
 });
@@ -5529,16 +5554,71 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _EventBus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../EventBus */ "./resources/js/EventBus.js");
 //
 //
 //
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "CategoryEdit",
-  props: ['categories']
+  data: function data() {
+    return {
+      dataedit: []
+    };
+  },
+  created: function created() {
+    _EventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('editcate', this.getdataedit);
+  },
+  methods: {
+    cancelform: function cancelform() {
+      this.$emit('closeedit');
+    },
+    getdataedit: function getdataedit(id) {
+      console.log(id); // this.axios.get('http://127.0.0.1:8000/api/category/' + id).then(response => {
+      //     this.dataedit = response.data
+      // })
+    },
+    updatecate: function updatecate() {
+      var data = {
+        name: this.dataedit.name
+      };
+      this.axios.patch("http://127.0.0.1:8000/api/category", data).then(function (response) {
+        console.log(response);
+      });
+    }
+  }
 });
+
+/***/ }),
+
+/***/ "./resources/js/EventBus.js":
+/*!**********************************!*\
+  !*** ./resources/js/EventBus.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+
+var EventBus = new vue__WEBPACK_IMPORTED_MODULE_0__["default"]();
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (EventBus);
 
 /***/ }),
 
@@ -29019,7 +29099,7 @@ var render = function () {
       _vm._v(" "),
       _c(
         "tbody",
-        _vm._l(_vm.books, function (book) {
+        _vm._l(_vm.books, function (book, index) {
           return _c("tr", [
             _c("td", [_vm._v(_vm._s(book.id))]),
             _vm._v(" "),
@@ -29042,7 +29122,7 @@ var render = function () {
                   staticClass: "btn btn-danger",
                   on: {
                     click: function ($event) {
-                      return _vm.dlbook(book.id)
+                      return _vm.dlbook(book.id, index)
                     },
                   },
                 },
@@ -29144,7 +29224,7 @@ var render = function () {
       _vm.showedit ? _c("CategoryEdit") : _vm._e(),
       _vm._v(" "),
       _vm.showedit == false
-        ? _c("div", [
+        ? _c("div", { on: { closeedit: _vm.closeedit } }, [
             _c(
               "button",
               {
@@ -29154,7 +29234,7 @@ var render = function () {
                 attrs: { id: "addcategory" },
                 on: { click: _vm.popupform },
               },
-              [_vm._v("Add Category")]
+              [_vm._v("Add Category\n        ")]
             ),
             _vm._v(" "),
             _c(
@@ -29215,7 +29295,7 @@ var render = function () {
                     attrs: { type: "button" },
                     on: { click: _vm.cancelform },
                   },
-                  [_vm._v("Cancel")]
+                  [_vm._v("Cancel\n            ")]
                 ),
               ]
             ),
@@ -29227,7 +29307,7 @@ var render = function () {
         _vm._v(" "),
         _c(
           "tbody",
-          _vm._l(_vm.categories, function (category) {
+          _vm._l(_vm.categories, function (category, index) {
             return _c("tr", [
               _c("td", [_vm._v(_vm._s(category.id))]),
               _vm._v(" "),
@@ -29242,7 +29322,11 @@ var render = function () {
                   "button",
                   {
                     staticClass: "btn btn-warning",
-                    on: { click: _vm.editcategory },
+                    on: {
+                      click: function ($event) {
+                        return _vm.editcategory(category.id)
+                      },
+                    },
                   },
                   [_vm._v("Edit")]
                 ),
@@ -29255,7 +29339,7 @@ var render = function () {
                     staticClass: "btn btn-danger",
                     on: {
                       click: function ($event) {
-                        return _vm.dlcategory(category.id)
+                        return _vm.dlcategory(category.id, index)
                       },
                     },
                   },
@@ -29315,16 +29399,80 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticStyle: { "margin-bottom": "10px" } }, [
+    _c(
+      "button",
+      {
+        staticClass: "btn btn-primary",
+        staticStyle: { "margin-bottom": "10px" },
+      },
+      [_vm._v("Edit Category")]
+    ),
+    _vm._v(" "),
+    _c(
+      "form",
+      {
+        ref: "form",
+        attrs: { id: "form" },
+        on: {
+          submit: function ($event) {
+            $event.preventDefault()
+            return _vm.updatecate.apply(null, arguments)
+          },
+        },
+      },
+      [
+        _c("div", { staticClass: "form-row" }, [
+          _c("div", { staticClass: "col-2" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.dataedit.name,
+                  expression: "dataedit.name",
+                },
+              ],
+              staticClass: "form-control",
+              attrs: { type: "text", placeholder: "Category" },
+              domProps: { value: _vm.dataedit.name },
+              on: {
+                input: function ($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.dataedit, "name", $event.target.value)
+                },
+              },
+            }),
+          ]),
+        ]),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary",
+            staticStyle: { "margin-top": "10px" },
+            attrs: { type: "submit" },
+          },
+          [_vm._v("Edit Category")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-warning",
+            staticStyle: { "margin-top": "10px" },
+            attrs: { type: "button" },
+            on: { click: _vm.cancelform },
+          },
+          [_vm._v("Cancel\n        ")]
+        ),
+      ]
+    ),
+  ])
 }
-var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [_c("h1", [_vm._v("Edit Category")])])
-  },
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

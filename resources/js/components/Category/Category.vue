@@ -1,8 +1,10 @@
 <template>
     <div class="container_category">
         <CategoryEdit v-if="showedit"></CategoryEdit>
-        <div v-if="showedit==false">
-            <button id="addcategory" ref="addcategory" class="btn btn-primary" v-on:click="popupform" style="margin-bottom: 10px">Add Category</button>
+        <div v-if="showedit==false" @closeedit="closeedit">
+            <button id="addcategory" ref="addcategory" class="btn btn-primary" v-on:click="popupform"
+                    style="margin-bottom: 10px">Add Category
+            </button>
             <form style="display: none" id="form" ref="form" @submit.prevent="addcategory">
                 <div class="form-row">
                     <div class="col-2">
@@ -10,7 +12,8 @@
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary" style="margin-top: 10px">Create Category</button>
-                <button type="button" class="btn btn-warning" style="margin-top: 10px" v-on:click="cancelform">Cancel</button>
+                <button type="button" class="btn btn-warning" style="margin-top: 10px" v-on:click="cancelform">Cancel
+                </button>
             </form>
         </div>
 
@@ -26,16 +29,16 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="category in categories">
+            <tr v-for="(category,index) in categories">
                 <td>{{ category.id }}</td>
                 <td>{{ category.name }}</td>
                 <td>{{ category.created_at }}</td>
                 <td>{{ category.updated_at }}</td>
                 <td>
-                    <button class="btn btn-warning" @click="editcategory">Edit</button>
+                    <button class="btn btn-warning" @click="editcategory(category.id)">Edit</button>
                 </td>
                 <td>
-                    <button class="btn btn-danger" v-on:click="dlcategory(category.id)">Delete</button>
+                    <button class="btn btn-danger" v-on:click="dlcategory(category.id,index)">Delete</button>
                 </td>
             </tr>
             </tbody>
@@ -44,9 +47,11 @@
 </template>
 <script>
 import CategoryEdit from "./CategoryEdit";
+import EventBus from "../../EventBus";
+
 export default {
     components: {
-      CategoryEdit,
+        CategoryEdit,
     },
     data() {
         return {
@@ -62,11 +67,12 @@ export default {
         })
     },
     methods: {
-        dlcategory(id) {
+        dlcategory(id, index) {
             this.axios.delete(`http://127.0.0.1:8000/api/category/` + id)
                 .then(response => {
-                    console.log(response)
-                    alert('xoa category thanh cong')
+                    if (index > -1) {
+                        this.categories.splice(index, 1); // 2nd parameter means remove one item only
+                    }
                 });
         },
         popupform() {
@@ -74,18 +80,26 @@ export default {
         },
         cancelform() {
             this.$refs.form.style.display = 'none';
+            this.category.name = ''
         },
         addcategory() {
             var data = {
                 name: this.category.name
             }
             this.axios.post(`http://127.0.0.1:8000/api/category`, data).then(response => {
-                console.log(response);
-            })
+                this.categories.push(response.data)
+                this.cancelform()
+            });
+
+
         },
-        editcategory()
-        {
-            this.showedit=true;
+        editcategory(id) {
+            this.showedit = true;
+            EventBus.$emit('editcate', id)
+
+        },
+        closeedit() {
+            this.showedit = false;
         }
     }
 

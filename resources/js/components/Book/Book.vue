@@ -30,7 +30,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr v-for="book in books">
+            <tr v-for="(book,index) in books">
                 <td>{{ book.id }}</td>
                 <td>{{ book.bookname }}</td>
                 <td>{{ book.category_id }}</td>
@@ -41,7 +41,7 @@
                     <button class="btn btn-warning">Edit</button>
                 </td>
                 <td>
-                    <button class="btn btn-danger" v-on:click="dlbook(book.id)">Delete</button>
+                    <button class="btn btn-danger" v-on:click="dlbook(book.id,index)">Delete</button>
                 </td>
             </tr>
             </tbody>
@@ -74,9 +74,11 @@ export default {
         });
     },
     methods: {
-        dlbook: function (id) {
+        dlbook: function (id,index) {
             this.axios.delete(`http://127.0.0.1:8000/api/book/` + id).then(response => {
-                alert('Xoa Book Thanh Cong')
+                if (index > -1) {
+                    this.books.splice(index, 1); // 2nd parameter means remove one item only
+                }
             });
         },
         openaddform() {
@@ -99,7 +101,7 @@ export default {
                 category_id: this.book.category_id,
             }
             this.axios.post(`http://127.0.0.1:8000/api/book`,data).then(response=>{
-                alert('Tao Book Thanh Cong')
+                this.books.push(response.data)
             })
 
 
