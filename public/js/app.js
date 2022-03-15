@@ -5389,6 +5389,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       };
       this.axios.post("http://127.0.0.1:8000/api/book", data).then(function (response) {
         _this3.books.push(response.data);
+
+        _this3.book = {};
+
+        _this3.closeform();
       });
     }
   }

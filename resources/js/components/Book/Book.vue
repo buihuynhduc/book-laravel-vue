@@ -51,10 +51,11 @@
 
 <script>
 import BookEdit from "./BookEdit";
+
 export default {
     name: "book",
     components: {
-      BookEdit,
+        BookEdit,
     },
     data() {
         return {
@@ -74,7 +75,7 @@ export default {
         });
     },
     methods: {
-        dlbook: function (id,index) {
+        dlbook: function (id, index) {
             this.axios.delete(`http://127.0.0.1:8000/api/book/` + id).then(response => {
                 if (index > -1) {
                     this.books.splice(index, 1); // 2nd parameter means remove one item only
@@ -90,9 +91,8 @@ export default {
         },
         addbook() {
             for (const category of this.categories) {
-                if(category.name==this.book.category_name)
-                {
-                    this.book.category_id=category.id;
+                if (category.name == this.book.category_name) {
+                    this.book.category_id = category.id;
                 }
             }
             var data = {
@@ -100,8 +100,10 @@ export default {
                 description: this.book.description,
                 category_id: this.book.category_id,
             }
-            this.axios.post(`http://127.0.0.1:8000/api/book`,data).then(response=>{
+            this.axios.post(`http://127.0.0.1:8000/api/book`, data).then(response => {
                 this.books.push(response.data)
+                this.book = {}
+                this.closeform()
             })
 
 
