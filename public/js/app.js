@@ -5263,6 +5263,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _BookEdit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BookEdit */ "./resources/js/components/Book/BookEdit.vue");
+/* harmony import */ var _EventBus__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../EventBus */ "./resources/js/EventBus.js");
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -5320,6 +5321,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "book",
@@ -5330,7 +5337,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     return {
       books: [],
       categories: [],
-      book: []
+      book: [],
+      showeditbook: false
     };
   },
   created: function created() {
@@ -5338,12 +5346,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
     this.axios.get("http://127.0.0.1:8000/api/book").then(function (response) {
       _this.books = response.data;
-      console.log(_this.books);
     });
     this.axios.get('http://127.0.0.1:8000/api/category').then(function (response) {
       _this.categories = response.data;
-      console.log(_this.categories);
     });
+    _EventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$on('updatelistbook', this.updatelistbook);
   },
   methods: {
     dlbook: function dlbook(id, index) {
@@ -5394,6 +5401,37 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
         _this3.closeform();
       });
+    },
+    editbook: function editbook(id, categories) {
+      this.showeditbook = true;
+      _EventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('editbook', id, categories);
+    },
+    canceleditbook: function canceleditbook() {
+      this.showeditbook = false;
+    },
+    updatelistbook: function updatelistbook(data) {
+      console.log(data);
+
+      var _iterator2 = _createForOfIteratorHelper(this.books),
+          _step2;
+
+      try {
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var book = _step2.value;
+
+          if (book.id == data.id) {
+            book.bookname = data.bookname;
+            book.category_id = data.category_id;
+            book.description = data.description;
+            console.log(book);
+            break;
+          }
+        }
+      } catch (err) {
+        _iterator2.e(err);
+      } finally {
+        _iterator2.f();
+      }
     }
   }
 });
@@ -5411,15 +5449,65 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _EventBus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../EventBus */ "./resources/js/EventBus.js");
 //
 //
 //
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "BookEdit",
-  props: {}
+  data: function data() {
+    return {
+      databook: [],
+      categories: []
+    };
+  },
+  created: function created() {
+    _EventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('editbook', this.editbook);
+  },
+  methods: {
+    editbook: function editbook(id, categories) {
+      var _this = this;
+
+      this.categories = categories;
+      this.axios.get('http://127.0.0.1:8000/api/book/' + id).then(function (response) {
+        _this.databook = response.data;
+      });
+    },
+    updatebook: function updatebook(id) {
+      var _this2 = this;
+
+      var data = {
+        bookname: this.databook.bookname,
+        description: this.databook.description,
+        category_id: this.databook.category_id
+      };
+      this.axios.put("http://127.0.0.1:8000/api/book/" + id, data).then(function (response) {
+        _EventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('updatelistbook', response.data);
+        _this2.databook = '';
+
+        _this2.canceleditbook();
+      });
+    },
+    canceleditbook: function canceleditbook() {
+      this.$emit('canceleditbook');
+    }
+  }
 });
 
 /***/ }),
@@ -5552,8 +5640,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       this.showedit = false;
     },
     updatemenu: function updatemenu(data) {
-      console.log(data.id);
-
       var _iterator = _createForOfIteratorHelper(this.categories),
           _step;
 
@@ -5616,15 +5702,15 @@ __webpack_require__.r(__webpack_exports__);
     _EventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$on('editcate', this.getdataedit);
   },
   methods: {
-    cancelform: function cancelform() {
-      this.$emit('closeedit');
-    },
     getdataedit: function getdataedit(id) {
       var _this = this;
 
       this.axios.get('http://127.0.0.1:8000/api/category/' + id).then(function (response) {
         _this.dataedit = response.data;
       });
+    },
+    cancelform: function cancelform() {
+      this.$emit('closeedit');
     },
     updatecate: function updatecate(id) {
       var _this2 = this;
@@ -29000,181 +29086,231 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container_book" }, [
-    _c(
-      "button",
-      {
-        staticClass: "btn btn-primary",
-        staticStyle: { "margin-bottom": "10px" },
-        attrs: { id: "create_book" },
-        on: { click: _vm.openaddform },
-      },
-      [_vm._v("Add Book\n    ")]
-    ),
-    _vm._v(" "),
-    _c(
-      "form",
-      {
-        ref: "form",
-        staticStyle: { "margin-bottom": "10px", display: "none" },
-        attrs: { id: "form" },
-        on: {
-          submit: function ($event) {
-            $event.preventDefault()
-            return _vm.addbook.apply(null, arguments)
+  return _c(
+    "div",
+    { staticClass: "container_book" },
+    [
+      _c("book-edit", {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.showeditbook == true,
+            expression: "showeditbook==true",
           },
-        },
-      },
-      [
-        _c("input", {
+        ],
+        on: { canceleditbook: _vm.canceleditbook },
+      }),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
           directives: [
             {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.book.bookname,
-              expression: "book.bookname",
+              name: "show",
+              rawName: "v-show",
+              value: _vm.showeditbook == false,
+              expression: "showeditbook==false",
             },
           ],
-          staticClass: "form-control",
-          staticStyle: { "margin-bottom": "10px" },
-          attrs: { type: "text", placeholder: "bookname" },
-          domProps: { value: _vm.book.bookname },
-          on: {
-            input: function ($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.$set(_vm.book, "bookname", $event.target.value)
+        },
+        [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-primary",
+              staticStyle: { "margin-bottom": "10px" },
+              attrs: { id: "create_book" },
+              on: { click: _vm.openaddform },
             },
-          },
-        }),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "form-col", staticStyle: { "margin-bottom": "10px" } },
-          [
-            _c("label", [_vm._v("Select Category")]),
-            _vm._v(" "),
-            _c(
-              "select",
-              {
+            [_vm._v("Add\n            Book\n        ")]
+          ),
+          _vm._v(" "),
+          _c(
+            "form",
+            {
+              ref: "form",
+              staticStyle: { "margin-bottom": "10px", display: "none" },
+              attrs: { id: "form" },
+              on: {
+                submit: function ($event) {
+                  $event.preventDefault()
+                  return _vm.addbook.apply(null, arguments)
+                },
+              },
+            },
+            [
+              _c("input", {
                 directives: [
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.book.category_name,
-                    expression: "book.category_name",
+                    value: _vm.book.bookname,
+                    expression: "book.bookname",
                   },
                 ],
                 staticClass: "form-control",
+                staticStyle: { "margin-bottom": "10px" },
+                attrs: { type: "text", placeholder: "bookname" },
+                domProps: { value: _vm.book.bookname },
                 on: {
-                  change: function ($event) {
-                    var $$selectedVal = Array.prototype.filter
-                      .call($event.target.options, function (o) {
-                        return o.selected
-                      })
-                      .map(function (o) {
-                        var val = "_value" in o ? o._value : o.value
-                        return val
-                      })
-                    _vm.$set(
-                      _vm.book,
-                      "category_name",
-                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
-                    )
+                  input: function ($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.book, "bookname", $event.target.value)
                   },
                 },
-              },
-              _vm._l(_vm.categories, function (category) {
-                return _c("option", [_vm._v(_vm._s(category.name))])
               }),
-              0
-            ),
-          ]
-        ),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.book.description,
-              expression: "book.description",
-            },
-          ],
-          staticClass: "form-control",
-          staticStyle: { "margin-bottom": "10px" },
-          attrs: { type: "text", placeholder: "description" },
-          domProps: { value: _vm.book.description },
-          on: {
-            input: function ($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.$set(_vm.book, "description", $event.target.value)
-            },
-          },
-        }),
-        _vm._v(" "),
-        _c(
-          "button",
-          { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-          [_vm._v("Create Book")]
-        ),
-        _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-warning",
-            attrs: { type: "button" },
-            on: { click: _vm.closeform },
-          },
-          [_vm._v("Cancel")]
-        ),
-      ]
-    ),
-    _vm._v(" "),
-    _c("table", { staticClass: "table table-striped" }, [
-      _vm._m(0),
-      _vm._v(" "),
-      _c(
-        "tbody",
-        _vm._l(_vm.books, function (book, index) {
-          return _c("tr", [
-            _c("td", [_vm._v(_vm._s(book.id))]),
-            _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(book.bookname))]),
-            _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(book.category_id))]),
-            _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(book.description))]),
-            _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(book.created_at))]),
-            _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(book.updated_at))]),
-            _vm._v(" "),
-            _vm._m(1, true),
-            _vm._v(" "),
-            _c("td", [
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "form-col",
+                  staticStyle: { "margin-bottom": "10px" },
+                },
+                [
+                  _c("label", [_vm._v("Select Category")]),
+                  _vm._v(" "),
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.book.category_name,
+                          expression: "book.category_name",
+                        },
+                      ],
+                      staticClass: "form-control",
+                      on: {
+                        change: function ($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function (o) {
+                              return o.selected
+                            })
+                            .map(function (o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.book,
+                            "category_name",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        },
+                      },
+                    },
+                    _vm._l(_vm.categories, function (category) {
+                      return _c("option", [_vm._v(_vm._s(category.name))])
+                    }),
+                    0
+                  ),
+                ]
+              ),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.book.description,
+                    expression: "book.description",
+                  },
+                ],
+                staticClass: "form-control",
+                staticStyle: { "margin-bottom": "10px" },
+                attrs: { type: "text", placeholder: "description" },
+                domProps: { value: _vm.book.description },
+                on: {
+                  input: function ($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.book, "description", $event.target.value)
+                  },
+                },
+              }),
+              _vm._v(" "),
+              _c(
+                "button",
+                { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+                [_vm._v("Create Book")]
+              ),
+              _vm._v(" "),
               _c(
                 "button",
                 {
-                  staticClass: "btn btn-danger",
-                  on: {
-                    click: function ($event) {
-                      return _vm.dlbook(book.id, index)
+                  staticClass: "btn btn-warning",
+                  attrs: { type: "button" },
+                  on: { click: _vm.closeform },
+                },
+                [_vm._v("Cancel")]
+              ),
+            ]
+          ),
+        ]
+      ),
+      _vm._v(" "),
+      _c("table", { staticClass: "table table-striped" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c(
+          "tbody",
+          _vm._l(_vm.books, function (book, index) {
+            return _c("tr", [
+              _c("td", [_vm._v(_vm._s(book.id))]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(book.bookname))]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(book.category_id))]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(book.description))]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(book.created_at))]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(book.updated_at))]),
+              _vm._v(" "),
+              _c("td", [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-warning",
+                    on: {
+                      click: function ($event) {
+                        return _vm.editbook(book.id, _vm.categories)
+                      },
                     },
                   },
-                },
-                [_vm._v("Delete")]
-              ),
-            ]),
-          ])
-        }),
-        0
-      ),
-    ]),
-  ])
+                  [_vm._v("Edit")]
+                ),
+              ]),
+              _vm._v(" "),
+              _c("td", [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-danger",
+                    on: {
+                      click: function ($event) {
+                        return _vm.dlbook(book.id, index)
+                      },
+                    },
+                  },
+                  [_vm._v("Delete")]
+                ),
+              ]),
+            ])
+          }),
+          0
+        ),
+      ]),
+    ],
+    1
+  )
 }
 var staticRenderFns = [
   function () {
@@ -29201,14 +29337,6 @@ var staticRenderFns = [
       ]),
     ])
   },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", [
-      _c("button", { staticClass: "btn btn-warning" }, [_vm._v("Edit")]),
-    ])
-  },
 ]
 render._withStripped = true
 
@@ -29232,7 +29360,147 @@ var render = function () {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div")
+  return _c("div", [
+    _c(
+      "button",
+      {
+        staticClass: "btn btn-primary",
+        staticStyle: { "margin-bottom": "10px" },
+      },
+      [_vm._v("Edit Book")]
+    ),
+    _vm._v(" "),
+    _c(
+      "form",
+      {
+        ref: "form",
+        staticStyle: { "margin-bottom": "10px" },
+        attrs: { id: "form" },
+        on: {
+          submit: function ($event) {
+            $event.preventDefault()
+            return _vm.updatebook(_vm.databook.id)
+          },
+        },
+      },
+      [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.databook.bookname,
+              expression: "databook.bookname",
+            },
+          ],
+          staticClass: "form-control",
+          staticStyle: { "margin-bottom": "10px" },
+          attrs: { type: "text", placeholder: "bookname" },
+          domProps: { value: _vm.databook.bookname },
+          on: {
+            input: function ($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.databook, "bookname", $event.target.value)
+            },
+          },
+        }),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "form-col", staticStyle: { "margin-bottom": "10px" } },
+          [
+            _c("label", [_vm._v("Select Category")]),
+            _vm._v(" "),
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.databook.category_id,
+                    expression: "databook.category_id",
+                  },
+                ],
+                staticClass: "form-control",
+                on: {
+                  change: function ($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function (o) {
+                        return o.selected
+                      })
+                      .map(function (o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.databook,
+                      "category_id",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+                    )
+                  },
+                },
+              },
+              _vm._l(_vm.categories, function (category) {
+                return _c(
+                  "option",
+                  {
+                    domProps: {
+                      value: category.id,
+                      selected: category.id == _vm.databook.category_id,
+                    },
+                  },
+                  [_vm._v(_vm._s(category.name))]
+                )
+              }),
+              0
+            ),
+          ]
+        ),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.databook.description,
+              expression: "databook.description",
+            },
+          ],
+          staticClass: "form-control",
+          staticStyle: { "margin-bottom": "10px" },
+          attrs: { type: "text", placeholder: "description" },
+          domProps: { value: _vm.databook.description },
+          on: {
+            input: function ($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.$set(_vm.databook, "description", $event.target.value)
+            },
+          },
+        }),
+        _vm._v(" "),
+        _c(
+          "button",
+          { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+          [_vm._v("Edit Book")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-warning",
+            attrs: { type: "button" },
+            on: { click: _vm.canceleditbook },
+          },
+          [_vm._v("Cancel")]
+        ),
+      ]
+    ),
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -29261,10 +29529,12 @@ var render = function () {
     "div",
     { staticClass: "container_category", on: { updatemenu: _vm.updatemenu } },
     [
-      _vm.showedit ? _c("CategoryEdit") : _vm._e(),
+      _vm.showedit
+        ? _c("CategoryEdit", { on: { closeedit: _vm.closeedit } })
+        : _vm._e(),
       _vm._v(" "),
       _vm.showedit == false
-        ? _c("div", { on: { closeedit: _vm.closeedit } }, [
+        ? _c("div", [
             _c(
               "button",
               {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\book;
 use Illuminate\Http\Request;
 use App\Models\category;
 
@@ -15,7 +16,8 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = category::all();
-        return response()->json($categories);
+       return response()->json($categories);
+
     }
 
     /**

@@ -16,10 +16,6 @@ class BookController extends Controller
     public function index()
     {
         $books = book::all();
-        foreach ($books as $value)
-        {
-
-        }
         return response()->json($books,200);
     }
 

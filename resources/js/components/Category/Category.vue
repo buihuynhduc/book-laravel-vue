@@ -1,7 +1,7 @@
 <template>
     <div class="container_category" @updatemenu="updatemenu">
-        <CategoryEdit v-if="showedit"></CategoryEdit>
-        <div v-if="showedit==false" @closeedit="closeedit">
+        <CategoryEdit v-if="showedit" @closeedit="closeedit"></CategoryEdit>
+        <div v-if="showedit==false">
             <button id="addcategory" ref="addcategory" class="btn btn-primary" v-on:click="popupform"
                     style="margin-bottom: 10px">Add Category
             </button>
@@ -103,10 +103,9 @@ export default {
             this.showedit = false;
         },
         updatemenu(data) {
-            console.log(data.id)
             for (const category of this.categories) {
-                if (data.id == category.id){
-                    category.name=data.name
+                if (data.id == category.id) {
+                    category.name = data.name
                 }
 
             }

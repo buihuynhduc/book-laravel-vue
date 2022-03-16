@@ -28,14 +28,16 @@ export default {
         EventBus.$on('editcate', this.getdataedit)
     },
     methods: {
-        cancelform() {
-            this.$emit('closeedit')
-        },
         getdataedit(id) {
             this.axios.get('http://127.0.0.1:8000/api/category/' + id).then(response => {
                 this.dataedit = response.data
             })
+
         },
+        cancelform() {
+            this.$emit('closeedit')
+        },
+
         updatecate(id) {
             var data = {
                 name: this.dataedit.name
