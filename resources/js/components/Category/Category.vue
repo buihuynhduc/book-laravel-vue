@@ -22,6 +22,7 @@
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Name</th>
+                <th scope="col">Count Book</th>
                 <th scope="col">Create</th>
                 <th scope="col">Update</th>
                 <th scope="col">Action</th>
@@ -32,6 +33,7 @@
             <tr v-for="(category,index) in categories">
                 <td>{{ category.id }}</td>
                 <td>{{ category.name }}</td>
+                <td>{{category.count}}</td>
                 <td>{{ category.created_at }}</td>
                 <td>{{ category.updated_at }}</td>
                 <td>

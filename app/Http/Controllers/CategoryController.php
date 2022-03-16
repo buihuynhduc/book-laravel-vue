@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\book;
 use Illuminate\Http\Request;
 use App\Models\category;
+use phpDocumentor\Reflection\Types\Object_;
 
 class CategoryController extends Controller
 {
@@ -16,7 +17,15 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = category::all();
-       return response()->json($categories);
+        $data= array();
+        foreach ($categories as $key => $value) {
+            $category = category::findOrFail($value->id);
+            $count = $category->books()->count();
+            $category->count = $count;
+            array_push($data,$category);
+
+        }
+        return response()->json($data);
 
     }
 
@@ -33,13 +42,13 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $category = new category();
-        $category->name= $request->name;
+        $category->name = $request->name;
         $category->save();
         return response()->json($category);
     }
@@ -47,7 +56,7 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -59,7 +68,7 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -70,14 +79,14 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $category = category::findOrFail($id);
-        $category->name= isset($request->name)?$request->name:$category->name;
+        $category->name = isset($request->name) ? $request->name : $category->name;
         $category->save();
         return response()->json($category);
     }
@@ -85,7 +94,7 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -93,8 +102,18 @@ class CategoryController extends Controller
         $category = category::findOrFail($id);
         $category->delete();
         return response()->json([
-            'Status'=>'200',
-            'Message'=>'xoa thanh cong',
+            'Status' => '200',
+            'Message' => 'xoa thanh cong',
         ]);
     }
+
+    public function getcountbook($id)
+    {
+        $category = category::findOrFail($id);
+        $count = $category->books()->count();
+
+        $category->new_stuff = $count;
+        return response()->json($category);
+    }
+
 }

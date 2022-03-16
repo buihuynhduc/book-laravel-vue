@@ -26,6 +26,7 @@ Route::delete('book/{id}',[\App\Http\Controllers\BookController::class,'destroy'
 
 Route::get('category',[\App\Http\Controllers\CategoryController::class,'index']);
 Route::get('category/{id}',[\App\Http\Controllers\CategoryController::class,'show']);
+Route::get('category/countbook/{id}',[\App\Http\Controllers\CategoryController::class,'getcountbook']);
 Route::post('category',[\App\Http\Controllers\CategoryController::class,'store']);
 Route::put('category/{id}',[\App\Http\Controllers\CategoryController::class,'update']);
 Route::delete('category/{id}',[\App\Http\Controllers\CategoryController::class,'destroy']);

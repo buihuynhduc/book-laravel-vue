@@ -5578,6 +5578,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -29623,6 +29625,8 @@ var render = function () {
               _vm._v(" "),
               _c("td", [_vm._v(_vm._s(category.name))]),
               _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(category.count))]),
+              _vm._v(" "),
               _c("td", [_vm._v(_vm._s(category.created_at))]),
               _vm._v(" "),
               _c("td", [_vm._v(_vm._s(category.updated_at))]),
@@ -29675,6 +29679,8 @@ var staticRenderFns = [
         _c("th", { attrs: { scope: "col" } }, [_vm._v("ID")]),
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [_vm._v("Count Book")]),
         _vm._v(" "),
         _c("th", { attrs: { scope: "col" } }, [_vm._v("Create")]),
         _vm._v(" "),
