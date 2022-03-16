@@ -5594,14 +5594,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     };
   },
   created: function created() {
-    _EventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$on('updatemenu', this.updatemenu);
-  },
-  mounted: function mounted() {
     var _this = this;
 
+    _EventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$on('updatemenu', this.updatemenu);
     this.axios.get('http://127.0.0.1:8000/api/category').then(function (response) {
       _this.categories = response.data;
-      console.log(_this.categories);
+      console.log(_this.categories.books);
     });
   },
   methods: {
@@ -29625,7 +29623,7 @@ var render = function () {
               _vm._v(" "),
               _c("td", [_vm._v(_vm._s(category.name))]),
               _vm._v(" "),
-              _c("td", [_vm._v(_vm._s(category.count))]),
+              _c("td", [_vm._v(_vm._s(category.books_count))]),
               _vm._v(" "),
               _c("td", [_vm._v(_vm._s(category.created_at))]),
               _vm._v(" "),

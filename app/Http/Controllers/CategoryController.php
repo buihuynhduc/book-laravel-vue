@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\book;
 use Illuminate\Http\Request;
 use App\Models\category;
-use phpDocumentor\Reflection\Types\Object_;
+
 
 class CategoryController extends Controller
 {
@@ -16,16 +16,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = category::all();
-        $data= array();
-        foreach ($categories as $key => $value) {
-            $category = category::findOrFail($value->id);
-            $count = $category->books()->count();
-            $category->count = $count;
-            array_push($data,$category);
-
-        }
-        return response()->json($data);
+        $categories = category::withCount('books')->get();
+        return response()->json($categories);
 
     }
 
@@ -105,15 +97,6 @@ class CategoryController extends Controller
             'Status' => '200',
             'Message' => 'xoa thanh cong',
         ]);
-    }
-
-    public function getcountbook($id)
-    {
-        $category = category::findOrFail($id);
-        $count = $category->books()->count();
-
-        $category->new_stuff = $count;
-        return response()->json($category);
     }
 
 }

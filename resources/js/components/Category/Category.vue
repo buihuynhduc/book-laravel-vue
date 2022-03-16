@@ -33,7 +33,7 @@
             <tr v-for="(category,index) in categories">
                 <td>{{ category.id }}</td>
                 <td>{{ category.name }}</td>
-                <td>{{category.count}}</td>
+                <td>{{category.books_count}}</td>
                 <td>{{ category.created_at }}</td>
                 <td>{{ category.updated_at }}</td>
                 <td>
@@ -64,11 +64,9 @@ export default {
     },
     created() {
         EventBus.$on('updatemenu', this.updatemenu)
-    },
-    mounted() {
         this.axios.get('http://127.0.0.1:8000/api/category').then(response => {
             this.categories = response.data;
-            console.log(this.categories);
+            console.log(this.categories.books);
         })
     },
     methods: {

@@ -32,7 +32,6 @@ export default {
             this.axios.get('http://127.0.0.1:8000/api/category/' + id).then(response => {
                 this.dataedit = response.data
             })
-
         },
         cancelform() {
             this.$emit('closeedit')
