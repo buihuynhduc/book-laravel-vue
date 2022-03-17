@@ -57,6 +57,7 @@
 <script>
 import BookEdit from "./BookEdit";
 import EventBus from "../../EventBus";
+import {HTTP} from "../../http-common";
 export default {
     name: "book",
     components: {
@@ -71,17 +72,17 @@ export default {
         }
     },
     created() {
-        this.axios.get(`http://127.0.0.1:8000/api/book`).then(response => {
+        HTTP.get(`book`).then(response => {
             this.books = response.data
         });
-        this.axios.get('http://127.0.0.1:8000/api/category').then(response => {
+        HTTP.get('category').then(response => {
             this.categories = response.data;
         });
         EventBus.$on('updatelistbook',this.updatelistbook)
     },
     methods: {
         dlbook: function (id, index) {
-            this.axios.delete(`http://127.0.0.1:8000/api/book/` + id).then(response => {
+            HTTP.delete(`book/` + id).then(response => {
                 if (index > -1) {
                     this.books.splice(index, 1); // 2nd parameter means remove one item only
                 }
@@ -105,7 +106,7 @@ export default {
                 description: this.book.description,
                 category_id: this.book.category_id,
             }
-            this.axios.post(`http://127.0.0.1:8000/api/book`, data).then(response => {
+            HTTP.post(`book`, data).then(response => {
                 this.books.push(response.data)
                 this.book = {}
                 this.closeform()

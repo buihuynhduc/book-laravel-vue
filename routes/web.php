@@ -19,4 +19,4 @@ Route::get('/category', function () {
 Route::get('/book', function () {
     return view('book');
 });
-Route::get('/',[\App\Http\Controllers\CategoryController::class,'index']);
+Route::get('/',[\App\Http\Controllers\BookController::class,'test']);

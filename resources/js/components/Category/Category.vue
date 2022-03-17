@@ -50,6 +50,7 @@
 <script>
 import CategoryEdit from "./CategoryEdit";
 import EventBus from "../../EventBus";
+import {HTTP} from "../../http-common";
 
 export default {
     components: {
@@ -64,14 +65,14 @@ export default {
     },
     created() {
         EventBus.$on('updatemenu', this.updatemenu)
-        this.axios.get('http://127.0.0.1:8000/api/category').then(response => {
+        HTTP.get(`category`).then(response => {
             this.categories = response.data;
             console.log(this.categories.books);
         })
     },
     methods: {
         dlcategory(id, index) {
-            this.axios.delete(`http://127.0.0.1:8000/api/category/` + id)
+            HTTP.delete(`category/` + id)
                 .then(response => {
                     if (index > -1) {
                         this.categories.splice(index, 1); // 2nd parameter means remove one item only
@@ -89,13 +90,14 @@ export default {
             var data = {
                 name: this.category.name
             }
-            this.axios.post(`http://127.0.0.1:8000/api/category`, data).then(response => {
+            HTTP.post(`category`, data).then(response => {
                 this.categories.push(response.data)
                 this.cancelform()
             });
         },
         editcategory(id) {
             this.showedit = true;
+            console.log(id);
             EventBus.$emit('editcate', id)
         },
         closeedit() {

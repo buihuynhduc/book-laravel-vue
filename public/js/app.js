@@ -5264,6 +5264,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _BookEdit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BookEdit */ "./resources/js/components/Book/BookEdit.vue");
 /* harmony import */ var _EventBus__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../EventBus */ "./resources/js/EventBus.js");
+/* harmony import */ var _http_common__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../http-common */ "./resources/js/http-common.js");
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -5328,6 +5329,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "book",
   components: {
@@ -5344,10 +5346,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   created: function created() {
     var _this = this;
 
-    this.axios.get("http://127.0.0.1:8000/api/book").then(function (response) {
+    _http_common__WEBPACK_IMPORTED_MODULE_2__.HTTP.get("book").then(function (response) {
       _this.books = response.data;
     });
-    this.axios.get('http://127.0.0.1:8000/api/category').then(function (response) {
+    _http_common__WEBPACK_IMPORTED_MODULE_2__.HTTP.get('category').then(function (response) {
       _this.categories = response.data;
     });
     _EventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$on('updatelistbook', this.updatelistbook);
@@ -5356,7 +5358,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     dlbook: function dlbook(id, index) {
       var _this2 = this;
 
-      this.axios["delete"]("http://127.0.0.1:8000/api/book/" + id).then(function (response) {
+      _http_common__WEBPACK_IMPORTED_MODULE_2__.HTTP["delete"]("book/" + id).then(function (response) {
         if (index > -1) {
           _this2.books.splice(index, 1); // 2nd parameter means remove one item only
 
@@ -5394,7 +5396,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         description: this.book.description,
         category_id: this.book.category_id
       };
-      this.axios.post("http://127.0.0.1:8000/api/book", data).then(function (response) {
+      _http_common__WEBPACK_IMPORTED_MODULE_2__.HTTP.post("book", data).then(function (response) {
         _this3.books.push(response.data);
 
         _this3.book = {};
@@ -5450,6 +5452,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _EventBus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../EventBus */ "./resources/js/EventBus.js");
+/* harmony import */ var _http_common__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../http-common */ "./resources/js/http-common.js");
 //
 //
 //
@@ -5468,6 +5471,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "BookEdit",
@@ -5485,7 +5489,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.categories = categories;
-      this.axios.get('http://127.0.0.1:8000/api/book/' + id).then(function (response) {
+      _http_common__WEBPACK_IMPORTED_MODULE_1__.HTTP.get('book/' + id).then(function (response) {
         _this.databook = response.data;
       });
     },
@@ -5497,7 +5501,7 @@ __webpack_require__.r(__webpack_exports__);
         description: this.databook.description,
         category_id: this.databook.category_id
       };
-      this.axios.put("http://127.0.0.1:8000/api/book/" + id, data).then(function (response) {
+      _http_common__WEBPACK_IMPORTED_MODULE_1__.HTTP.put("http://127.0.0.1:8000/api/book/" + id, data).then(function (response) {
         _EventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('updatelistbook', response.data);
         _this2.databook = '';
 
@@ -5525,6 +5529,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _CategoryEdit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CategoryEdit */ "./resources/js/components/Category/CategoryEdit.vue");
 /* harmony import */ var _EventBus__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../EventBus */ "./resources/js/EventBus.js");
+/* harmony import */ var _http_common__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../http-common */ "./resources/js/http-common.js");
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -5582,6 +5587,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 
 
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
     CategoryEdit: _CategoryEdit__WEBPACK_IMPORTED_MODULE_0__["default"]
@@ -5597,7 +5603,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     var _this = this;
 
     _EventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$on('updatemenu', this.updatemenu);
-    this.axios.get('http://127.0.0.1:8000/api/category').then(function (response) {
+    _http_common__WEBPACK_IMPORTED_MODULE_2__.HTTP.get("category").then(function (response) {
       _this.categories = response.data;
       console.log(_this.categories.books);
     });
@@ -5606,7 +5612,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     dlcategory: function dlcategory(id, index) {
       var _this2 = this;
 
-      this.axios["delete"]("http://127.0.0.1:8000/api/category/" + id).then(function (response) {
+      _http_common__WEBPACK_IMPORTED_MODULE_2__.HTTP["delete"]("category/" + id).then(function (response) {
         if (index > -1) {
           _this2.categories.splice(index, 1); // 2nd parameter means remove one item only
 
@@ -5626,7 +5632,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       var data = {
         name: this.category.name
       };
-      this.axios.post("http://127.0.0.1:8000/api/category", data).then(function (response) {
+      _http_common__WEBPACK_IMPORTED_MODULE_2__.HTTP.post("category", data).then(function (response) {
         _this3.categories.push(response.data);
 
         _this3.cancelform();
@@ -5634,6 +5640,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     },
     editcategory: function editcategory(id) {
       this.showedit = true;
+      console.log(id);
       _EventBus__WEBPACK_IMPORTED_MODULE_1__["default"].$emit('editcate', id);
     },
     closeedit: function closeedit() {
@@ -5674,6 +5681,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _EventBus__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../EventBus */ "./resources/js/EventBus.js");
+/* harmony import */ var _http_common__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../http-common */ "./resources/js/http-common.js");
 //
 //
 //
@@ -5690,6 +5698,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "CategoryEdit",
@@ -5705,7 +5714,7 @@ __webpack_require__.r(__webpack_exports__);
     getdataedit: function getdataedit(id) {
       var _this = this;
 
-      this.axios.get('http://127.0.0.1:8000/api/category/' + id).then(function (response) {
+      _http_common__WEBPACK_IMPORTED_MODULE_1__.HTTP.get('category/' + id).then(function (response) {
         _this.dataedit = response.data;
       });
     },
@@ -5718,7 +5727,7 @@ __webpack_require__.r(__webpack_exports__);
       var data = {
         name: this.dataedit.name
       };
-      this.axios.put("http://127.0.0.1:8000/api/category/" + id, data).then(function (response) {
+      _http_common__WEBPACK_IMPORTED_MODULE_1__.HTTP.put("category/" + id, data).then(function (response) {
         _EventBus__WEBPACK_IMPORTED_MODULE_0__["default"].$emit('updatemenu', response.data);
         _this2.dataedit = '';
 
@@ -5824,6 +5833,27 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/http-common.js":
+/*!*************************************!*\
+  !*** ./resources/js/http-common.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "HTTP": () => (/* binding */ HTTP)
+/* harmony export */ });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+
+var HTTP = axios__WEBPACK_IMPORTED_MODULE_0___default().create({
+  baseURL: "http://127.0.0.1:8000/api/",
+  timeout: 1000
+});
 
 /***/ }),
 

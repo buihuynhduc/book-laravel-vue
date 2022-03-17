@@ -18,6 +18,7 @@
 
 <script>
 import EventBus from "../../EventBus";
+import {HTTP} from "../../http-common";
 export default {
     name: "BookEdit",
     data() {
@@ -33,7 +34,7 @@ export default {
          editbook(id,categories)
          {
              this.categories= categories
-             this.axios.get('http://127.0.0.1:8000/api/book/'+id).then(response=>{
+             HTTP.get('book/'+id).then(response=>{
                  this.databook= response.data
              })
          },
@@ -44,7 +45,7 @@ export default {
                   description: this.databook.description,
                   category_id: this.databook.category_id
               }
-              this.axios.put(`http://127.0.0.1:8000/api/book/`+id, data).then(response=>{
+              HTTP.put(`http://127.0.0.1:8000/api/book/`+id, data).then(response=>{
                   EventBus.$emit('updatelistbook',response.data)
                   this.databook=''
                   this.canceleditbook()

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\book;
 use Illuminate\Http\Request;
 use App\Models\category;
+use App\Transformer\BookTransformer;
 
 
 class CategoryController extends Controller
@@ -14,10 +15,15 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         $categories = category::withCount('books')->get();
         return response()->json($categories);
+
+    }
+    public function test()
+    {
 
     }
 

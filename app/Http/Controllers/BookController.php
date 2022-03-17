@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\book;
-use App\Models\category;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use App\Transformers\BookTransformer;
+use League\Fractal\Manager;
+
 
 class BookController extends Controller
 {
@@ -13,10 +16,25 @@ class BookController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    protected $bookTransformer;
+
+    public function __construct(BookTransformer $bookTransformer)
+    {
+        $this->bookTransformer =$bookTransformer;
+    }
+
+    public function test()
+    {
+        $book = book::all();
+
+        $data =\App\Http\Resources\book::collection($book);
+        return $data;
+    }
+
     public function index()
     {
-        $books = book::all();
-        return response()->json($books,200);
+        $book = book::all();
+        return response()->json($book);
     }
 
     /**
@@ -32,23 +50,23 @@ class BookController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-       $book = new book();
-       $book->bookname = $request->bookname;
-       $book->description= $request->description;
-       $book->category_id= $request->category_id;
-       $book->save();
-       return response()->json($book);
+        $book = new book();
+        $book->bookname = $request->bookname;
+        $book->description = $request->description;
+        $book->category_id = $request->category_id;
+        $book->save();
+        return response()->json($book);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -60,7 +78,7 @@ class BookController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -71,24 +89,24 @@ class BookController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $book = book::findOrFail($id);
-        $book->bookname =isset( $request->bookname)?$request->bookname:$book->bookname;
-        $book->description=isset( $request->description)?$request->description:$book->description;
-        $book->category_id= isset( $request->category_id)?$request->category_id:$book->category_id;
+        $book->bookname = isset($request->bookname) ? $request->bookname : $book->bookname;
+        $book->description = isset($request->description) ? $request->description : $book->description;
+        $book->category_id = isset($request->category_id) ? $request->category_id : $book->category_id;
         $book->save();
-        return response()->json($book,200);
+        return response()->json($book, 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -96,8 +114,8 @@ class BookController extends Controller
         $book = book::findOrFail($id);
         $book->delete();
         return response()->json([
-            'Status'=>200,
-            'Message'=>'xoa thanh cong',
+            'Status' => 200,
+            'Message' => 'xoa thanh cong',
         ]);
     }
 }

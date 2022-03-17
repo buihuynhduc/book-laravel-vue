@@ -16,6 +16,7 @@
 
 <script>
 import EventBus from "../../EventBus";
+import {HTTP} from "../../http-common";
 
 export default {
     name: "CategoryEdit",
@@ -29,7 +30,7 @@ export default {
     },
     methods: {
         getdataedit(id) {
-            this.axios.get('http://127.0.0.1:8000/api/category/' + id).then(response => {
+            HTTP.get('category/' + id).then(response => {
                 this.dataedit = response.data
             })
         },
@@ -41,7 +42,7 @@ export default {
             var data = {
                 name: this.dataedit.name
             }
-            this.axios.put(`http://127.0.0.1:8000/api/category/`+id, data).then(response => {
+            HTTP.put(`category/`+id, data).then(response => {
                 EventBus.$emit('updatemenu',response.data)
                 this.dataedit=''
                 this.cancelform()
