@@ -13,10 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/category', function () {
-    return view('category');
-});
-Route::get('/book', function () {
-    return view('book');
-});
-Route::get('/',[\App\Http\Controllers\BookController::class,'test']);
+Route::get('{any}', function () {
+    return view('app');
+})->where('any', '.*');

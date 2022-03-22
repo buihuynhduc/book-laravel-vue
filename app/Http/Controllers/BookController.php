@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\book;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use App\Transformers\BookTransformer;
-use League\Fractal\Manager;
 
 
 class BookController extends Controller
@@ -16,25 +14,10 @@ class BookController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    protected $bookTransformer;
-
-    public function __construct(BookTransformer $bookTransformer)
-    {
-        $this->bookTransformer =$bookTransformer;
-    }
-
-    public function test()
-    {
-        $book = book::all();
-
-        $data =\App\Http\Resources\book::collection($book);
-        return $data;
-    }
-
     public function index()
     {
-        $book = book::all();
-        return response()->json($book);
+        $data =\App\Http\Resources\book::collection(book::all());
+        return response()->json($data);
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Transformers\CategoryTransformer;
+
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\category;
 
@@ -21,8 +21,6 @@ class book extends JsonResource
             'bookname' => $this->bookname,
             'description'=>$this->description,
             'category_id'=> $this->category_id,
-            'category'=>category::collection($this->category()->get())
-
         ];
     }
 }

@@ -5781,19 +5781,19 @@ Vue.use(vue_axios__WEBPACK_IMPORTED_MODULE_0__["default"], axios);
  * Vue components. It will recursively scan this directory for the Vue
  * components and automatically register them with their "basename".
  *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
+ * Eg. ./components/ExampleComponent.vue -> <example-component></example-component
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('category', (__webpack_require__(/*! ./components/Category/Category */ "./resources/js/components/Category/Category.vue")["default"]));
-Vue.component('book', (__webpack_require__(/*! ./components/Book/Book */ "./resources/js/components/Book/Book.vue")["default"]));
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+Vue.component('category', (__webpack_require__(/*! ./components/Category/Category */ "./resources/js/components/Category/Category.vue")["default"]));
+Vue.component('book', (__webpack_require__(/*! ./components/Book/Book */ "./resources/js/components/Book/Book.vue")["default"]));
 var app = new Vue({
   el: '#app'
 });
@@ -5851,8 +5851,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 
 var HTTP = axios__WEBPACK_IMPORTED_MODULE_0___default().create({
-  baseURL: "http://127.0.0.1:8000/api/",
-  timeout: 1000
+  baseURL: "http://127.0.0.1:8000/api/"
 });
 
 /***/ }),

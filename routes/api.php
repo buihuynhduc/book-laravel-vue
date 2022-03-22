@@ -15,9 +15,6 @@ use App\Http\Controllers\Controller;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
 Route::get('book',[\App\Http\Controllers\BookController::class,'index']);
 Route::get('book/{id}',[\App\Http\Controllers\BookController::class,'show']);
 Route::post('book',[\App\Http\Controllers\BookController::class,'store']);
@@ -31,3 +28,18 @@ Route::post('category',[\App\Http\Controllers\CategoryController::class,'store']
 Route::put('category/{id}',[\App\Http\Controllers\CategoryController::class,'update']);
 Route::delete('category/{id}',[\App\Http\Controllers\CategoryController::class,'destroy']);
 
+
+
+Route::post('register',[\App\Http\Controllers\Auth\RegisterController::class,'register']);
+Route::post('login',[\App\Http\Controllers\Auth\LoginController::class,'login'])->name('login');
+Route::group(['middleware'=>['auth:sanctum']],function (){
+    Route::post('/logout',[\App\Http\Controllers\Auth\LogoutController::class,'logout']);
+    Route::post('profile',[\App\Http\Controllers\Auth\Profile::class,'profile']);
+});
+//Admin
+
+Route::post('admin/register',[\App\Http\Controllers\AdminAuth\Auth::class,'register']);
+Route::post('admin/login',[\App\Http\Controllers\AdminAuth\Auth::class,'login']);
+Route::group(['middleware'=>['auth:sanctum']],function (){
+    Route::post('admin/profile',[\App\Http\Controllers\AdminAuth\Auth::class,'profile']);
+});

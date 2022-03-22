@@ -18,7 +18,7 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $categories = category::withCount('books')->get();
+        $categories = \App\Http\Resources\category::collection(category::withCount('books')->get());
         return response()->json($categories);
 
     }
