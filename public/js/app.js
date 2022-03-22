@@ -10900,7 +10900,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.container_book[data-v-2fad0914] {\n    margin: 20px 20px;\n}\n#create_book[data-v-2fad0914] {\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.container_book[data-v-2fad0914] {\r\n    margin: 20px 20px;\n}\n#create_book[data-v-2fad0914] {\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -10924,7 +10924,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.container_category[data-v-3b2330b4] {\n    margin: 20px 20px;\n}\n#create_category[data-v-3b2330b4] {\n    margin-bottom: 10px;\n}\n#form[data-v-3b2330b4] {\n    margin-bottom: 10px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.container_category[data-v-3b2330b4] {\r\n    margin: 20px 20px;\n}\n#create_category[data-v-3b2330b4] {\r\n    margin-bottom: 10px;\n}\n#form[data-v-3b2330b4] {\r\n    margin-bottom: 10px;\n}\r\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
